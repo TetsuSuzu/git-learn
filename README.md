@@ -336,7 +336,7 @@ on:
     branches: [ "master" ]
   schedule:
     - cron: "0 0 * * 1"
-# matrix.language に解析対象言語を指定（python / javascript-typescript など）
+# matrix.language に解析対象言語を指定（このリポジトリは actions。他に python / javascript-typescript など）
 ```
 
 > `security-events: write` 権限により、解析結果が **Security タブ**へ書き込まれます。

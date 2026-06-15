@@ -23,9 +23,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 解析したい言語に置き換える。
-        # 例: javascript-typescript / python / java-kotlin / go / csharp / cpp / ruby / swift
-        language: [ "python" ]
+        # このリポジトリには Python 等のソースが無く、存在する「コード」は
+        # GitHub Actions のワークフローのみ。そのため解析対象を "actions" にする。
+        # （Python を解析したい場合は .py を追加し "python" に変更する）
+        # 例: actions / javascript-typescript / python / java-kotlin / go / csharp / cpp / ruby / swift
+        language: [ "actions" ]
 
     steps:
       - name: Checkout repository
