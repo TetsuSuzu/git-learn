@@ -321,6 +321,25 @@ git stash pop                 # 退避した変更を戻す
 3. **Code scanning** の項目で **CodeQL analysis** を有効化（Default 設定が簡単）
 4. 以降、push や Pull Request のたびに自動で解析が実行される
 
+### ワークフローで設定する場合（Advanced）
+
+Default 設定の代わりに、ワークフローファイルで細かく制御できます。
+このリポジトリには実例として [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml) を用意しています。
+
+```yaml
+# 抜粋: push / PR / 毎週の定期スキャンで CodeQL を実行
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  schedule:
+    - cron: "0 0 * * 1"
+# matrix.language に解析対象言語を指定（python / javascript-typescript など）
+```
+
+> `security-events: write` 権限により、解析結果が **Security タブ**へ書き込まれます。
+
 ### アラートの確認
 
 - リポジトリ上部の **Security** タブ → **Code scanning alerts** で一覧表示
@@ -365,6 +384,35 @@ git stash pop                 # 退避した変更を戻す
 - VS Code / Visual Studio / JetBrains IDE などの拡張機能
 - GitHub.com 上の Copilot Chat
 - コマンドライン（GitHub CLI の Copilot 拡張）
+
+### 導入手順（IDE別）
+
+> 事前に GitHub アカウントで **Copilot のライセンス**（個人プラン、または組織から付与）が有効である必要があります。
+
+#### VS Code
+1. 拡張機能ビューで **「GitHub Copilot」** を検索してインストール
+   （チャットを使うには **「GitHub Copilot Chat」** も）
+2. インストール後、GitHub アカウントで **サインイン**（右下や通知から認証）
+3. 使い方:
+   - **インライン提案**: コード入力中にグレーで候補表示 → `Tab` で採用、`Esc` で却下
+   - **Copilot Chat**: サイドバーのチャットアイコン、またはエディタ内で `Ctrl + I`（Mac: `Cmd + I`）
+
+#### Visual Studio
+1. **拡張機能の管理** → 「GitHub Copilot」を検索してインストール（新しいバージョンは同梱）
+2. IDE 右上から GitHub アカウントでサインイン
+3. インライン提案は `Tab`、チャットは Copilot Chat ウィンドウから利用
+
+#### JetBrains IDE（IntelliJ / PyCharm など）
+1. **Settings → Plugins → Marketplace** で **「GitHub Copilot」** を検索してインストール
+2. IDE を再起動し、**Tools → GitHub Copilot → Login to GitHub** でサインイン
+3. インライン提案は `Tab`、チャットは Copilot Chat ツールウィンドウから利用
+
+#### コマンドライン（GitHub CLI）
+```bash
+gh extension install github/gh-copilot   # Copilot 拡張を導入
+gh copilot suggest "ブランチを作成して切り替えるコマンド"   # コマンドを提案
+gh copilot explain "git rebase -i HEAD~3"               # コマンドの意味を説明
+```
 
 > コードスキャン（第9章）が「**書いたコードの安全性チェック**」を担うのに対し、Copilot は「**コードを書く・理解する作業そのもの**」を支援します。
 

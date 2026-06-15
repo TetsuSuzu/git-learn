@@ -1,0 +1,51 @@
+# CodeQL によるコードスキャン（サンプル）
+# README「9. GitHub のコードスキャンとセキュリティ」の実例。
+# push / Pull Request / 定期スケジュールで自動解析し、結果を [Security] タブに表示する。
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  schedule:
+    # 毎週月曜 09:00 JST（UTC 00:00）に定期スキャン
+    - cron: "0 0 * * 1"
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write   # 解析結果を Security タブへ書き込むために必要
+      actions: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        # 解析したい言語に置き換える。
+        # 例: javascript-typescript / python / java-kotlin / go / csharp / cpp / ruby / swift
+        language: [ "python" ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # CodeQL の初期化（解析対象言語を指定）
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          # 既定のクエリに加えてセキュリティ拡張クエリも実行する場合:
+          # queries: security-extended
+
+      # コンパイル言語（java/c++ など）はビルドが必要。
+      # autobuild が失敗する場合は、この step を手動ビルドコマンドに置き換える。
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      # 解析の実行 → 結果は自動的に [Security] > [Code scanning alerts] に表示される
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
