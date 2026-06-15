@@ -1,0 +1,28 @@
+# 標準の組み込み自動化（GitHub Actions スターターワークフロー）の例題
+# GitHub の [Actions] タブ →「New workflow」で提示される標準デモとほぼ同じ内容。
+# push されると自動実行され、実行ログに各種メッセージを出力する。
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} が GitHub Actions を試しています 🚀
+
+on: [push]
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 このジョブは ${{ github.event_name }} イベントによって自動起動されました。"
+      - run: echo "🐧 このジョブは ${{ runner.os }} のランナー上で実行中です。"
+      - run: echo "🔎 ブランチ名は ${{ github.ref }} 、リポジトリは ${{ github.repository }} です。"
+
+      # リポジトリのコードをランナーへチェックアウト（標準アクション）
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - run: echo "💡 ${{ github.repository }} のコードをランナーにクローンしました。"
+      - run: echo "🖥️ ワークフローはこれからテストを実行する準備ができました。"
+
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+      - run: echo "🍏 このジョブのステータスは ${{ job.status }} です。"
