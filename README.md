@@ -30,6 +30,8 @@ git の基本操作を学ぶための練習リポジトリです。
 
 ## 1. リポジトリの初期化
 
+> 🔰 **超初心者の方へ**：Windows PowerShell で「メモ帳でファイルを作る → Git で記録する」までを1ステップずつ解説した入門ガイドがあります → **[はじめての Git（Windows PowerShell・超入門）](getting-started-windows-powershell.md)**
+
 ```bash
 git init
 ```
